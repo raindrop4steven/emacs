@@ -4,7 +4,7 @@
 ;; just comment it out by adding a semicolon to the start of the line.
 ;; You may delete these explanatory comments.
 
-
+;; Set repository
 (setq package-archives '(("gnu"   . "http://elpa.emacs-china.org/gnu/")
                            ("melpa" . "http://elpa.emacs-china.org/melpa/")))
 (package-initialize)
@@ -15,10 +15,47 @@
 (setq undo-strong-limit 40000000)
 
 (global-hl-line-mode 1)
-(set-face-background 'hl-line "midnight blue")
+;; (set-face-background 'hl-line "midnight blue")
+
+;; Navigation
+(defun previous-blank-line ()
+  "Moves to the previous line containing nothing but whitespace."
+  (interactive)
+  (search-backward-regexp "^[ \t]*\n")
+  )
+
+(defun next-blank-line ()
+  "Moves to the next line containing nothing but whitespace."
+  (interactive)
+  (forward-line)
+  (search-forward-regexp "^[ \t]*\n")
+  (forward-line -1)
+  )
 
 ;; Setup my key binding
 (define-key global-map "\e " 'set-mark-command)
+;; Setup my find-files
+(define-key global-map "\ef" 'find-file)
+(define-key global-map "\eF" 'find-file-other-window)
+;; Setup my key binding
+(global-set-key (read-kbd-macro "\eb")  'ido-switch-buffer)
+(global-set-key (read-kbd-macro "\eB")  'ido-switch-buffer-other-window)
+
+;; Setup my move
+(define-key global-map [C-right] 'forward-word)
+(define-key global-map [C-left] 'backward-word)
+(define-key global-map [C-up] 'previous-blank-line)
+(define-key global-map [C-down] 'next-blank-line)
+
+;; Editting
+(define-key global-map "" 'copy-region-as-kill)
+(define-key global-map "" 'yank)
+(define-key global-map "" 'nil)
+(define-key global-map "" 'rotate-yank-pointer)
+(define-key global-map "\eu" 'undo)
+(define-key global-map "\e6" 'upcase-word)
+(define-key global-map "\e^" 'captilize-word)
+(define-key global-map "\e." 'fill-paragraph)
 
 ;; Turn off the bell on Mac OS X
 (defun nil-bell ())
@@ -116,9 +153,9 @@
 (split-window-horizontally)
 
 ;; Set default Theme Color.
-(add-to-list 'default-frame-alist '(foreground-color . "#D2D2D2"))
-(add-to-list 'default-frame-alist '(background-color . "#161616"))
-(add-to-list 'default-frame-alist '(cursor-color . "#40FF40"))
+;; (add-to-list 'default-frame-alist '(foreground-color . "#D2D2D2"))
+;; (add-to-list 'default-frame-alist '(background-color . "#161616"))
+;; (add-to-list 'default-frame-alist '(cursor-color . "#40FF40"))
 
 
 ;; compnay-mode
@@ -177,6 +214,10 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(ansi-color-faces-vector
+   [default default default italic underline success warning error])
+ '(ansi-color-names-vector
+   ["#2d3743" "#ff4242" "#74af68" "#dbdb95" "#34cae2" "#008b8b" "#00ede1" "#e1e1e0"])
  '(custom-enabled-themes nil)
  '(package-selected-packages
    (quote
